@@ -7,11 +7,10 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  generate-snake-game:
+  generate-and-commit-snake-game:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Generate Snake Game from GitHub Contribution Grid
         uses: Platane/snk@v3.2.0
@@ -21,3 +20,12 @@ jobs:
             dist/github-snake.svg
             dist/github-snake-dark.svg?palette=github-dark
             dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add dist/
+          git commit -m "Update GitHub snake game images" -a || echo "No changes to commit"
+          git push origin main
+
